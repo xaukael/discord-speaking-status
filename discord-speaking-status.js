@@ -42,3 +42,7 @@ Hooks.once("init", async () => {
   });
 
 });
+
+Hooks.on('renderSettings', (app, html)=>{
+  html.find('#settings-access').prepend($(`<button><i class="fa-brands fa-discord"></i> Open Discord StreamKit</button>`).click(function(){openDiscordWindow()}))
+})
