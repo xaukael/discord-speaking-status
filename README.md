@@ -1,5 +1,5 @@
 # Discord Speaking Status
-Connects to a discord voice channel through a https://streamkit.discord.com/ tab.
+Relays speaking status in a discord voice channel from a https://streamkit.discord.com/ tab.
 
 Outlines user character token and their user color marker in the players ui when they speak.
 
