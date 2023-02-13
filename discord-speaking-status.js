@@ -14,7 +14,9 @@ listenForDiscordEvents = function (e) {
     tokens.forEach(t => { $('#hud').find(`div.token-marker.${t.id}`).remove(); });
   }
 }
-Hooks.on('ready', window.addEventListener("message", listenForDiscordEvents, false))
+Hooks.on('ready',()=>{
+  window.addEventListener("message", listenForDiscordEvents, false)
+});
 
 
 Hooks.on('refreshToken', (t)=>{
