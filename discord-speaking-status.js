@@ -21,7 +21,7 @@ Hooks.on('ready',()=>{
 
 Hooks.on('refreshToken', (t)=>{
 	if (t.isPreview) return;
-  $(`#hud > div.token-marker.${t.id}`).css({ top: `${t.y}px`, left: `${t.x}px`});
+  $(`#hud > div.speaking-token-marker.${t.id}`).css({ top: `${t.y}px`, left: `${t.x}px`});
 });
 
 openDiscordWindow = function () {
@@ -48,7 +48,6 @@ Hooks.on('renderSettings', (app, html)=>{
 })
 
 Hooks.on('renderUserConfig', (app, html, data)=>{
-  console.log(data.user.flags["discord-speaking-status"].nickname)
   html.append(`<style>#${html.closest('.app').attr('id')} { height: auto !important;} </style>`)
   html.find('form').prepend($(`
         <div class="form-group">
