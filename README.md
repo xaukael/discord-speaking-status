@@ -1,6 +1,10 @@
 # Discord Speaking Status
 Relays speaking status in a discord voice channel from a https://streamkit.discord.com/ tab.
 
+The streamkit tab must be opened from Foundry. You do this by clicking the 'Open Discrod Streamkit' button in the Game Access section of the settings tab.
+
+This must be done by each client/user. Discord Streamkit connects to the Discod Desktop Application, so this will not work with Discord instacnes in a browser.
+
 Outlines user character token and their user color marker in the players ui when they speak.
 
 Must be used in browser. Will not work with the Foundry VTT desktop application.
