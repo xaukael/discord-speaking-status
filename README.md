@@ -11,7 +11,7 @@ If you do not want to go through the trouble of manually installing the extensio
 
 Tampermonkey: https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en
 
-Using this userscript
+Using this userscript:
 ````
 // ==UserScript==
 // @name         New Userscript
@@ -40,7 +40,7 @@ Using this userscript
   };
 })();
 ````
-Or you can just paste this part in the console (F12) of the streamkit window after you open it from Foundry,
+Or you can just paste this part in the console (F12) of the streamkit window after you open it from Foundry:
 ````
 const log = console.log.bind(console);
 console.log = (...args) => {
