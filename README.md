@@ -1,13 +1,13 @@
 # Discord Speaking Status
+Outlines user character token and their user color marker in the players ui when they speak.
+
 Relays speaking status in a discord voice channel from a https://streamkit.discord.com/ tab.
 
 The streamkit tab must be opened from Foundry. You do this by clicking the 'Open Discrod Streamkit' button in the Game Access section of the settings tab.
 
 This must be done by each client/user. Discord Streamkit connects to the Discod Desktop Application, so this will not work with Discord instances in a browser.
 
-Outlines user character token and their user color marker in the players ui when they speak.
-
-Must be used in browser. Will not work with the Foundry VTT desktop application.
+You must access your Foundry game in a browser to allow it to open the streamkit tab. Will not work with the Foundry VTT desktop application.
 
 Until the extension is approved by our Google overlords and published on the chrome web store, you must install the necessary extension by extracting discord-speaking-relay.zip, enable developer mode in your chrome based browser, and load it as an unpacked extension.
 
