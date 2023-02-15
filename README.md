@@ -11,7 +11,7 @@ If you do not want to go through the trouble of manually installing the extensio
 
 Tampermonkey: https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en
 
-Using this script
+Using this userscript
 ````
 // ==UserScript==
 // @name         New Userscript
@@ -40,6 +40,21 @@ Using this script
   };
 })();
 ````
+Or you can just paste this part in the console (F12) of the streamkit window after you open it from Foundry,
+````
+const log = console.log.bind(console);
+  console.log = (...args) => {
+    if (!args[1]) return log(...args);
+    if (typeof args[1] !== "object") return log(...args);
+    let data = args[1].data;
+    let name = document.querySelector(`img[src*="${data.user_id}"]`)?.parentElement?.querySelector("span").innerHTML;
+    if (!name) return log(...args);
+    data.evt = args[1].evt;
+    data.name = name;
+    window.opener.postMessage(data, "*");
+    log(data.name, data.status);
+  };
+  ````
 
 ![indicators](https://github.com/xaukael/discord-speaking-status/blob/ba76675eb8316e94bc6fb246feaaed041ca669d0/speaking-indicators.jpg)
 ![indicators](https://github.com/xaukael/discord-speaking-status/blob/6c7381110f913505221f74d2969e952d4b6b1d67/to-open-streamkit-tab.jpg)
