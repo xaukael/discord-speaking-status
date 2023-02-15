@@ -1,6 +1,8 @@
 # Discord Speaking Status
 Outlines user character token and their user color marker in the players ui when they speak.
 
+![indicators](https://github.com/xaukael/discord-speaking-status/blob/ba76675eb8316e94bc6fb246feaaed041ca669d0/speaking-indicators.jpg)
+
 Relays speaking status in a discord voice channel from a https://streamkit.discord.com/ tab.
 
 The streamkit tab must be opened from Foundry. You do this by clicking the 'Open Discrod Streamkit' button in the Game Access section of the settings tab.
@@ -61,5 +63,3 @@ console.log = (...args) => {
   log(data.name, data.status);
 };
 ````
-
-![indicators](https://github.com/xaukael/discord-speaking-status/blob/ba76675eb8316e94bc6fb246feaaed041ca669d0/speaking-indicators.jpg)
