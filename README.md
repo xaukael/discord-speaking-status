@@ -21,36 +21,25 @@ Tampermonkey: https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebh
 
 Using this userscript:
 ````
-// ==UserScript==
-// @name         New Userscript
-// @namespace    http://tampermonkey.net/
-// @version      0.1
-// @description  Sends data about the speaker to the window that opened https://streamkit.discord.com/overlay/voice/
-// @author       Xaukael
-// @match        https://streamkit.discord.com/overlay/voice/*
-// @icon         https://www.google.com/s2/favicons?sz=64&domain=discord.com
-// @grant        none
-// ==/UserScript==
-
 (async function() {
-  "use strict";
-  const users = {};
-  const log = window.console.log.bind(window.console);
-  window.console.log = (...args) => {
-    if (!args[1]) return log(...args);
-    if (typeof args[1] !== 'object') return log(...args);
-    let data = args[1].data;
-  	data.evt = args[1].evt;
-  	if (data.evt == "VOICE_STATE_UPDATE") {
-  		users[data.user.id] = `${data.user.username}#${data.user.discriminator}`
-  		return console.log(users[data.user.id], 'added to users', users)
-  	}
-  	if (!["SPEAKING_START", "SPEAKING_STOP"].includes(data.evt)) return log(...args);
-  	data.name = users[data.user_id];
-  	delete data.channel_id; delete data.user_id;
-  	log('sending this data to window.opener', data);
-    window.opener.postMessage(data, '*');
-  }
+    'use strict';
+const users = {};
+const log = window.console.log.bind(window.console);
+window.console.log = (...args) => {
+  if (!args[1]) return log(...args);
+  if (typeof args[1] !== 'object') return log(...args);
+  let data = args[1].data;
+	data.evt = args[1].evt;
+	if (data.evt == "VOICE_STATE_UPDATE") {
+		users[data.user.id] = `${data.user.username}#${data.user.discriminator}`
+		return console.log(users[data.user.id], 'added to users', users)
+	}
+	if (!["SPEAKING_START", "SPEAKING_STOP"].includes(data.evt)) return log(...args);
+	data.name = users[data.user_id];
+	data.nick = document.querySelector(`img[src*="${data.user_id}"]`)?.parentElement?.querySelector("span").innerHTML;
+	log('sending this data to window.opener', data);
+  window.opener.postMessage(data, '*');
+}
 })();
 ````
 Or you can just paste this part in the console (F12) of the streamkit window after you open it from Foundry. Users will have to rejoin the channel after this runs to work properly though:
