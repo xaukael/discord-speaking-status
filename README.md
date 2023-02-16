@@ -5,6 +5,10 @@ Outlines user character token and their user color marker in the players ui when
 
 Relays speaking status in a discord voice channel from a https://streamkit.discord.com/ tab.
 
+Each Foundry User must have their cooresponding Discord User ID set un the User Configuration:
+
+![config](https://github.com/xaukael/discord-speaking-status/blob/3b9ced5fe95c693e684d1c2c2382f8491fa3b8c0/set-discord-id-on-user.jpg)
+
 The streamkit tab must be opened from Foundry. You do this by clicking the 'Open Discrod Streamkit' button in the Game Access section of the settings tab.
 
 ![indicators](https://github.com/xaukael/discord-speaking-status/blob/6c7381110f913505221f74d2969e952d4b6b1d67/to-open-streamkit-tab.jpg)
