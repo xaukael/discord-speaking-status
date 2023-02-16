@@ -68,6 +68,7 @@ window.console.log = (...args) => {
   }
   if (!["SPEAKING_START", "SPEAKING_STOP"].includes(data.evt)) return log(...args);
   data.name = users[data.user_id];
+  if (name == undefined) data.name = document.querySelector(`img[src*="${data.user_id}"]`)?.parentElement?.querySelector("span").innerHTML;
   delete data.channel_id; delete data.user_id;
   log('sending this data to window.opener', data);
   window.opener.postMessage(data, '*');
