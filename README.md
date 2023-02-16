@@ -53,7 +53,7 @@ Using this userscript:
   }
 })();
 ````
-Or you can just paste this part in the console (F12) of the streamkit window after you open it from Foundry:
+Or you can just paste this part in the console (F12) of the streamkit window after you open it from Foundry. Users will have to rejoin the channel after this runs to work properly though:
 ````
 const users = {};
 const log = window.console.log.bind(window.console);
