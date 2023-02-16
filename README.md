@@ -34,32 +34,42 @@ Using this userscript:
 
 (async function() {
   "use strict";
-  const log = console.log.bind(console);
-  console.log = (...args) => {
+  const users = {};
+  const log = window.console.log.bind(window.console);
+  window.console.log = (...args) => {
     if (!args[1]) return log(...args);
-    if (typeof args[1] !== "object") return log(...args);
+    if (typeof args[1] !== 'object') return log(...args);
     let data = args[1].data;
-    let name = document.querySelector(`img[src*="${data.user_id}"]`)?.parentElement?.querySelector("span").innerHTML;
-    if (!name) return log(...args);
-    data.evt = args[1].evt;
-    data.name = name;
-    window.opener.postMessage(data, "*");
-    log(data.name, data.status);
-  };
+  	data.evt = args[1].evt;
+  	if (data.evt == "VOICE_STATE_UPDATE") {
+  		users[data.user.id] = `${data.user.username}#${data.user.discriminator}`
+  		return console.log(users[data.user.id], 'added to users', users)
+  	}
+  	if (!["SPEAKING_START", "SPEAKING_STOP"].includes(data.evt)) return log(...args);
+  	data.name = users[data.user_id];
+  	delete data.channel_id; delete data.user_id;
+  	log('sending this data to window.opener', data);
+    window.opener.postMessage(data, '*');
+  }
 })();
 ````
 Or you can just paste this part in the console (F12) of the streamkit window after you open it from Foundry:
 ````
-const log = console.log.bind(console);
-console.log = (...args) => {
+const users = {};
+const log = window.console.log.bind(window.console);
+window.console.log = (...args) => {
   if (!args[1]) return log(...args);
-  if (typeof args[1] !== "object") return log(...args);
+  if (typeof args[1] !== 'object') return log(...args);
   let data = args[1].data;
-  let name = document.querySelector(`img[src*="${data.user_id}"]`)?.parentElement?.querySelector("span").innerHTML;
-  if (!name) return log(...args);
-  data.evt = args[1].evt;
-  data.name = name;
-  window.opener.postMessage(data, "*");
-  log(data.name, data.status);
-};
+	data.evt = args[1].evt;
+	if (data.evt == "VOICE_STATE_UPDATE") {
+		users[data.user.id] = `${data.user.username}#${data.user.discriminator}`
+		return console.log(users[data.user.id], 'added to users', users)
+	}
+	if (!["SPEAKING_START", "SPEAKING_STOP"].includes(data.evt)) return log(...args);
+	data.name = users[data.user_id];
+	delete data.channel_id; delete data.user_id;
+	log('sending this data to window.opener', data);
+  window.opener.postMessage(data, '*');
+}
 ````
