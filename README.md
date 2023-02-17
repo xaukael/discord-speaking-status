@@ -9,6 +9,8 @@ The voice channel must saved in the module's settings. It must be in this format
 
 `https://streamkit.discord.com/overlay/voice/<server_id>/<voice_channel_id>`
 
+Set up your channel here: https://streamkit.discord.com/overlay
+
 Each Foundry User must have their cooresponding Discord User ID set un the User Configuration. These can be found in the logs on the streamkit window or copied from Discord in the user context menu with developer mode enabled.
 
 ![config](https://github.com/xaukael/discord-speaking-status/blob/3b9ced5fe95c693e684d1c2c2382f8491fa3b8c0/set-discord-id-on-user.jpg)
