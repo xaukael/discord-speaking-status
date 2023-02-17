@@ -3,7 +3,11 @@ Outlines user character token and their user color marker in the players ui when
 
 ![indicators](https://github.com/xaukael/discord-speaking-status/blob/ba76675eb8316e94bc6fb246feaaed041ca669d0/speaking-indicators.jpg)
 
-Relays speaking status in a discord voice channel from a https://streamkit.discord.com/ tab.
+Relays speaking status in a discord voice channel from a https://streamkit.discord.com tab. 
+
+The voice channel must saved in the module's settings. It must be in this format:  
+
+https://streamkit.discord.com/overlay/voice/<server_id>/<voice_channel_id>
 
 Each Foundry User must have their cooresponding Discord User ID set un the User Configuration. These can be found in the logs on the streamkit window or copied from Discord in the user context menu with developer mode enabled.
 
