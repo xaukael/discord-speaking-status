@@ -5,13 +5,11 @@ Outlines user character token and their user color marker in the players ui when
 
 Relays speaking status in a discord voice channel from a https://streamkit.discord.com tab. 
 
-The voice channel must saved in the module's settings. It must be in this format:  
+The voice channel must saved in the module's settings. Right click the voice channel, copy link, and paste into settings. It will look like this: 
 
-`https://streamkit.discord.com/overlay/voice/<server_id>/<voice_channel_id>`
+`https://discord.com/channels/170995199584108546/745362299082244196`
 
-Set up your channel here: https://streamkit.discord.com/overlay and set up a voice widget. exclude everything after 
-
-Each Foundry User must have their cooresponding Discord User ID set un the User Configuration. These can be found in the logs on the streamkit window or copied from Discord in the user context menu with developer mode enabled.
+Each Foundry User must have their cooresponding Discord User ID set un the User Configuration. These can be found in the logs on the streamkit window (F12) or copied from Discord in the user context menu with developer mode enabled.
 
 ![config](https://github.com/xaukael/discord-speaking-status/blob/3b9ced5fe95c693e684d1c2c2382f8491fa3b8c0/set-discord-id-on-user.jpg)
 
