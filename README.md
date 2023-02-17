@@ -7,7 +7,7 @@ Relays speaking status in a discord voice channel from a https://streamkit.disco
 
 The voice channel must saved in the module's settings. It must be in this format:  
 
-https://streamkit.discord.com/overlay/voice/<server_id>/<voice_channel_id>
+`https://streamkit.discord.com/overlay/voice/<server_id>/<voice_channel_id>`
 
 Each Foundry User must have their cooresponding Discord User ID set un the User Configuration. These can be found in the logs on the streamkit window or copied from Discord in the user context menu with developer mode enabled.
 
