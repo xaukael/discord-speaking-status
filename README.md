@@ -9,7 +9,7 @@ The voice channel must saved in the module's settings. It must be in this format
 
 `https://streamkit.discord.com/overlay/voice/<server_id>/<voice_channel_id>`
 
-Set up your channel here: https://streamkit.discord.com/overlay
+Set up your channel here: https://streamkit.discord.com/overlay and set up a voice widget. exclude everything after 
 
 Each Foundry User must have their cooresponding Discord User ID set un the User Configuration. These can be found in the logs on the streamkit window or copied from Discord in the user context menu with developer mode enabled.
 
@@ -36,7 +36,7 @@ Using this userscript:
 const users = {};
 const log = window.console.log.bind(window.console);
 window.console.log = (...args) => {
-  if (!args[1]) return log(...args);
+  if (!args[1] || !window.opener) return log(...args);
   if (typeof args[1] !== 'object') return log(...args);
   let data = args[1].data;
 	data.evt = args[1].evt;
@@ -57,7 +57,7 @@ Or you can just paste this part in the console (F12) of the streamkit window aft
 const users = {};
 const log = window.console.log.bind(window.console);
 window.console.log = (...args) => {
-  if (!args[1]) return log(...args);
+  if (!args[1] || !window.opener)return log(...args);
   if (typeof args[1] !== 'object') return log(...args);
   let data = args[1].data;
 	data.evt = args[1].evt;
