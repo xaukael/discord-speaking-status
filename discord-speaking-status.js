@@ -3,7 +3,7 @@ listenForDiscordEvents = function (e) {
   if (!user) {
     
     let id = 'assign-' + e.data.user_id;
-    console.log($(`#${id}`).length)
+    //console.log($(`#${id}`).length)
     if ($(`#${id}`).length) {
       if (e.data.evt=="SPEAKING_START") return $(`#${id}`).css({outline: '3px solid #3BA53B'});
       if (e.data.evt=="SPEAKING_STOP") return $(`#${id}`).css({outline: 'unset'});
@@ -23,8 +23,9 @@ listenForDiscordEvents = function (e) {
   Hooks.call('discordSpeakingEvent', e.data)
   let tokens = user.character?.getActiveTokens();
   if (e.data.evt=="SPEAKING_START") {
+    $(`#player-list > li[data-user-id="${user.id}"] span:first-child`).css({outline: '5px solid #3BA53B'});
     tokens.forEach(t => {
-      $(`#player-list > li[data-user-id="${user.id}"] span:first-child`).css({outline: '5px solid #3BA53B'});
+      
       $('#hud').append($(`<div class="speaking-token-marker ${t.id}" style="position: absolute; top: ${t.y}px; left: ${t.x}px; width: ${t.w}px; height: ${t.h}px; outline: ${canvas.grid.size/20}px solid #3BA53B; border-radius: ${canvas.grid.size/20}px;"></div>`));
       $(`#token-action-bar li[data-token-id="${t.id}"]`).css({outline: '3px solid #3BA53B'});
     });

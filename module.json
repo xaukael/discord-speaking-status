@@ -5,7 +5,7 @@
   "title": "Discord Speaking Status",
   "description": "Indicates who is speaking in a Discord Voice Channel",
   "authors": [{"name":"Xaukael"}],
-  "version": "1.2.2",
+  "version": "1.2.3",
 	"socket": true,
   "compatibility": {
       "minimum": "10",
