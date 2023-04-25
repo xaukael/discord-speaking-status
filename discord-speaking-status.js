@@ -1,6 +1,25 @@
 listenForDiscordEvents = function (e) {
   let user = game.users.find(u=> u.flags["discord-speaking-status"]?.id == e.data.user_id)
-  if (!user) return;
+  if (!user) {
+    
+    let id = 'assign-' + e.data.user_id;
+    console.log($(`#${id}`).length)
+    if ($(`#${id}`).length) {
+      if (e.data.evt=="SPEAKING_START") return $(`#${id}`).css({outline: '3px solid #3BA53B'});
+      if (e.data.evt=="SPEAKING_STOP") return $(`#${id}`).css({outline: 'unset'});
+    }
+    new Dialog({
+      title: e.data.user_id,
+      content: game.users.filter(u=> !u.flags["discord-speaking-status"]?.id).reduce((a,u)=>a+=`<option value="${u.id}">${u.name}</option>`,`<select name="user">`)+`</select>`,
+      buttons: {
+        confirm: {label:'confirm', callback: (html)=>{
+          game.users.get(html.find('select').val()).setFlag('discord-speaking-status', 'id', e.data.user_id)
+        }}
+      },
+      default: 'confirm'
+    },{id}).render(true)
+    return;
+  };
   Hooks.call('discordSpeakingEvent', e.data)
   let tokens = user.character?.getActiveTokens();
   if (e.data.evt=="SPEAKING_START") {
@@ -35,8 +54,8 @@ Hooks.on('refreshToken', (t)=>{
 });
 
 openDiscordWindow = async function () {
-  let code = "const users = {};\nconst log = window.console.log.bind(window.console);\nwindow.console.log = (...args) => {\n  if (!args[1]) return log(...args);\n  if (typeof args[1] !== 'object') return log(...args);\n  let data = args[1].data;\n\tdata.evt = args[1].evt;\n\tif (data.evt == \"VOICE_STATE_UPDATE\") {\n\t\tusers[data.user.id] = `${data.user.username}#${data.user.discriminator}`\n\t\treturn console.log(users[data.user.id], 'added to users', users)\n\t}\n\tif (![\"SPEAKING_START\", \"SPEAKING_STOP\"].includes(data.evt)) return log(...args);\n\tdata.name = users[data.user_id];if (name == undefined) data.name = document.querySelector(`img[src*=\"${data.user_id}\"]`)?.parentElement?.querySelector(\"span\").innerHTML;\n\tdelete data.channel_id; delete data.user_id;\n\tlog('sending this data to window.opener', data);\n  window.opener.postMessage(data, '*');\n}"
-  await window.navigator.clipboard.writeText(code);
+  //let code = "const users = {};\nconst log = window.console.log.bind(window.console);\nwindow.console.log = (...args) => {\n  if (!args[1]) return log(...args);\n  if (typeof args[1] !== 'object') return log(...args);\n  let data = args[1].data;\n\tdata.evt = args[1].evt;\n\tif (data.evt == \"VOICE_STATE_UPDATE\") {\n\t\tusers[data.user.id] = `${data.user.username}#${data.user.discriminator}`\n\t\treturn console.log(users[data.user.id], 'added to users', users)\n\t}\n\tif (![\"SPEAKING_START\", \"SPEAKING_STOP\"].includes(data.evt)) return log(...args);\n\tdata.name = users[data.user_id];if (name == undefined) data.name = document.querySelector(`img[src*=\"${data.user_id}\"]`)?.parentElement?.querySelector(\"span\").innerHTML;\n\tdelete data.channel_id; delete data.user_id;\n\tlog('sending this data to window.opener', data);\n  window.opener.postMessage(data, '*');\n}"
+  //await window.navigator.clipboard.writeText(code);
   channel = game.settings.get("discord-speaking-status", "channel");
   let parts = channel.split('/');
   window.open(`https://streamkit.discord.com/overlay/voice/${parts[4]}/${parts[5]}`)
