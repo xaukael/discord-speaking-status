@@ -1,46 +1,35 @@
-listenForDiscordEvents = function (e) {
-  let user = game.users.find(u=> u.flags["discord-speaking-status-web"]?.id == e.data.userId)
-  /*
-  if (!user) {
-    
-    let id = 'assign-' + e.data.userId;
-    //console.log($(`#${id}`).length)
-    if ($(`#${id}`).length) {
-      if (e.data.evt=="SPEAKING_START") return $(`#${id}`).css({outline: '3px solid #3BA53B'});
-      if (e.data.evt=="SPEAKING_STOP") return $(`#${id}`).css({outline: 'unset'});
+let speakingSocket
+
+Hooks.once("socketlib.ready", () => {
+  function speak(userId, speaking) {
+    let user = game.users.get(userId);
+    let tokens = user.character?.getActiveTokens();
+    if (speaking) {
+      $(`#player-list > li[data-user-id="${user.id}"] span:first-child`).css({outline: '5px solid #3BA53B'});
+      tokens.forEach(t => {
+        
+        $('#hud').append($(`<div class="speaking-token-marker ${t.id}" style="position: absolute; top: ${t.y}px; left: ${t.x}px; width: ${t.w}px; height: ${t.h}px; outline: ${canvas.grid.size/20}px solid #3BA53B; border-radius: ${canvas.grid.size/20}px;"></div>`));
+        $(`#token-action-bar li[data-token-id="${t.id}"]`).css({outline: '3px solid #3BA53B'});
+      });
     }
-    new Dialog({
-      title: e.data.userId,
-      content: game.users.filter(u=> !u.flags["discord-speaking-status-web"]?.id).reduce((a,u)=>a+=`<option value="${u.id}">${u.name}</option>`,`<select name="user">`)+`</select>`,
-      buttons: {
-        confirm: {label:'confirm', callback: (html)=>{
-          game.users.get(html.find('select').val()).setFlag('discord-speaking-status-web', 'id', e.data.userId)
-        }}
-      },
-      default: 'confirm'
-    },{id}).render(true)
-    return;
-  };*/
-  Hooks.call('discordSpeakingEvent', e.data)
-  let tokens = user.character?.getActiveTokens();
-  if (e.data.speaking) {
-    $(`#player-list > li[data-user-id="${user.id}"] span:first-child`).css({outline: '5px solid #3BA53B'});
-    tokens.forEach(t => {
-      
-      $('#hud').append($(`<div class="speaking-token-marker ${t.id}" style="position: absolute; top: ${t.y}px; left: ${t.x}px; width: ${t.w}px; height: ${t.h}px; outline: ${canvas.grid.size/20}px solid #3BA53B; border-radius: ${canvas.grid.size/20}px;"></div>`));
-      $(`#token-action-bar li[data-token-id="${t.id}"]`).css({outline: '3px solid #3BA53B'});
-    });
+    if (!speaking) {
+      $(`#player-list > li[data-user-id="${user.id}"] span:first-child`).css({outline: 'unset'});
+      tokens.forEach(t => { 
+        $('#hud').find(`div.speaking-token-marker.${t.id}`).remove(); 
+        $(`#token-action-bar li[data-token-id="${t.id}"]`).css({outline: 'unset'});
+      });
+    }
   }
-  if (!e.data.speaking) {
-    $(`#player-list > li[data-user-id="${user.id}"] span:first-child`).css({outline: 'unset'});
-    tokens.forEach(t => { 
-      $('#hud').find(`div.speaking-token-marker.${t.id}`).remove(); 
-      $(`#token-action-bar li[data-token-id="${t.id}"]`).css({outline: 'unset'});
-    });
-  }
-}
+  speakingSocket = socketlib.registerModule("discord-speaking-status-web");
+  speakingSocket.register("speak", speak);
+  speakingSocket.emit = function(userId, speaking) { speakingSocket.executeForEveryone(speak, game.user.id, speaking); }
+});
 
 Hooks.on('ready',()=>{
+  listenForDiscordEvents = function (e) {
+    let user = game.users.find(u=>u.flags["discord-speaking-status-web"]?.id == e.data.userId)
+    return speakingSocket.emit(game.user.id, e.data.speaking);
+  }
   window.addEventListener("message", listenForDiscordEvents, false)
 });
 
@@ -56,8 +45,6 @@ Hooks.on('refreshToken', (t)=>{
 });
 
 openDiscordWindow = async function () {
-  //let code = "const users = {};\nconst log = window.console.log.bind(window.console);\nwindow.console.log = (...args) => {\n  if (!args[1]) return log(...args);\n  if (typeof args[1] !== 'object') return log(...args);\n  let data = args[1].data;\n\tdata.evt = args[1].evt;\n\tif (data.evt == \"VOICE_STATE_UPDATE\") {\n\t\tusers[data.user.id] = `${data.user.username}#${data.user.discriminator}`\n\t\treturn console.log(users[data.user.id], 'added to users', users)\n\t}\n\tif (![\"SPEAKING_START\", \"SPEAKING_STOP\"].includes(data.evt)) return log(...args);\n\tdata.name = users[data.user_id];if (name == undefined) data.name = document.querySelector(`img[src*=\"${data.user_id}\"]`)?.parentElement?.querySelector(\"span\").innerHTML;\n\tdelete data.channel_id; delete data.user_id;\n\tlog('sending this data to window.opener', data);\n  window.opener.postMessage(data, '*');\n}"
-  //await window.navigator.clipboard.writeText(code);
   channel = game.settings.get("discord-speaking-status-web", "channel");
   let parts = channel.split('/');
   window.open(channel, '_blank');
@@ -87,7 +74,6 @@ document.querySelectorAll('li[class*="containerDefault"]').forEach((li)=>{
 });</textarea>`, buttons:{}}, {width: 'auto'}).render(true);
 }
 Hooks.once("init", async () => {
-  
   game.settings.register('discord-speaking-status-web', 'channel', {
     name: `Discord Voice Channel URL`,
     hint: `Right click the channel in discord and click "Copy Link"`,
@@ -97,7 +83,6 @@ Hooks.once("init", async () => {
     default: "",
     requiresReload: false
   });
-
 });
 
 Hooks.on('renderSettings', (app, html)=>{
@@ -105,7 +90,6 @@ Hooks.on('renderSettings', (app, html)=>{
 })
 
 Hooks.on('renderUserConfig', (app, html, data)=>{
-  html.append(`<style>#${html.closest('.app').attr('id')} { height: auto !important;} </style>`)
   html.find('form').prepend($(`
         <div class="form-group">
           <label>Discord User ID</label>
@@ -113,4 +97,5 @@ Hooks.on('renderUserConfig', (app, html, data)=>{
         </div>
   `));
   html.find('input[name="flags.discord-speaking-status-web.id"]').val(data.user.flags["discord-speaking-status-web"]?.id)
+  app.setPosition()
 });
